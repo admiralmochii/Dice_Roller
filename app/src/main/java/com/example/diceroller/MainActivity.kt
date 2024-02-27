@@ -60,6 +60,7 @@ fun DiceWithButtonAndImage(modifier: Modifier = Modifier) {
             Text(stringResource(R.string.roll))
 
 //            hello world
+            // test commit
         }
     }
 }
