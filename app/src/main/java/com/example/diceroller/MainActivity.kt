@@ -35,7 +35,7 @@ class FitnessApp : ComponentActivity() {
     }
 }
 
-@Preview
+@Preview // test comment
 @Composable
 fun FitnessTrackerApp() {
     var steps by remember { mutableStateOf(0) }
