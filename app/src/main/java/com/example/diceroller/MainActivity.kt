@@ -69,7 +69,7 @@ fun DiceWithButtonAndImage(modifier: Modifier = Modifier) {
         Button(
             onClick = { result = (1..6).random() },
         ) {
-            Text(text = stringResource(R.string.roll), fontSize = 24.sp)
+            Text(text = stringResource(R.string.roll), fontSize = 40.sp)
         }
     }
 }
