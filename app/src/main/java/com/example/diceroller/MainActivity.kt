@@ -17,27 +17,39 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.diceroller.ui.theme.DiceRollerTheme
+
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 
 class FitnessApp : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            DiceRollerTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    FitnessTrackerApp()
-                }
-            }
+            FitnessAppNavigation()
         }
     }
 }
 
-@Preview
 @Composable
-fun FitnessTrackerApp() {
+fun FitnessAppNavigation() {
+    val navController = rememberNavController()
+
+    NavHost(navController, startDestination = "FitnessTrackerApp") {
+        composable("FitnessTrackerApp") {
+            FitnessTrackerApp(navController)
+        }
+        composable("LoginPage") {
+            LoginPage()
+        }
+    }
+}
+// @Preview // test comment
+@Composable
+fun FitnessTrackerApp(navController: NavController) {
     var steps by remember { mutableStateOf(0) }
 
     Column(
@@ -50,21 +62,34 @@ fun FitnessTrackerApp() {
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
-            onClick = { steps += 100 },
+            onClick = { navController.navigate("LoginPage") },
         ) {
             Text(text = "Press To Continue")
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-//        Image(
-//            painter = painterResource(id = R.drawable.ic_walking),
-//            contentDescription = "Walking Icon",
-//            modifier = Modifier.size(100.dp)
-//        )
+    }
+}
+@Composable
+fun LoginPage() {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ){
+        Text(text = "Login Page", fontSize = 24.sp)
     }
 }
 
-fun loginPage() {
+@Preview // test comment
+@Composable
+fun PreviewFitnessTrackerApp() {
+    FitnessTrackerApp(rememberNavController())
+}
 
+@Preview
+@Composable
+fun PreviewLoginPage() {
+    LoginPage()
 }
