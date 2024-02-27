@@ -64,3 +64,7 @@ fun FitnessTrackerApp() {
 //        )
     }
 }
+
+fun loginPage() {
+
+}
