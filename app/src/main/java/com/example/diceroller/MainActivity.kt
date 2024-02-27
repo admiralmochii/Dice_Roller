@@ -58,6 +58,8 @@ fun DiceWithButtonAndImage(modifier: Modifier = Modifier) {
 
         Button(onClick = { /*Todo*/ }){
             Text(stringResource(R.string.roll))
+
+//            hello world
         }
     }
 }
