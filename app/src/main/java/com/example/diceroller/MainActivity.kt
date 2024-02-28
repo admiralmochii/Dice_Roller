@@ -9,12 +9,22 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+
+
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.TextButton
+
+
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+
+
+
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.res.painterResource
@@ -28,6 +38,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+
+
 
 class FitnessApp : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,14 +59,17 @@ fun FitnessAppNavigation() {
             FitnessTrackerApp(navController)
         }
         composable("LoginPage") {
-            LoginPage()
+            LoginPage(navController)
         }
+        composable("AppHomepage") {
+            AppHomepage(navController)
+        }
+
     }
 }
 // @Preview // test comment
 @Composable
 fun FitnessTrackerApp(navController: NavController) {
-    var steps by remember { mutableStateOf(0) }
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -75,9 +90,9 @@ fun FitnessTrackerApp(navController: NavController) {
 
     }
 }
-@Preview
 @Composable
-fun LoginPage() {
+// This function sets up the login page activity of the app
+fun LoginPage(navController: NavController) {
     // Use MaterialTheme for consistent styling and easy theme switching
     MaterialTheme {
         // Surface is a composable provided by Material Design that gives you a background
@@ -121,7 +136,7 @@ fun LoginPage() {
 
                 // Login Button
                 Button(
-                    onClick = { /* Login logic and handling over here. Should call another function? */ },
+                    onClick = { navController.navigate("AppHomepage") },
                     // Modifier to set the width of the button
                     modifier = Modifier.width(200.dp)
                 ) {
@@ -136,6 +151,73 @@ fun LoginPage() {
         }
     }
 }
+
+
+
+
+
+
+@Composable
+fun NavigationBar(
+    items: List<Pair<Int, String>>, // Pair of icon resource ID and label
+    selectedIndex: Int,
+    onItemSelected: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(modifier = modifier) {
+        items.forEachIndexed { index, (iconResId, itemLabel) ->
+            NavigationBarItem(
+                icon = {
+                    // Load the custom icon from resources
+                    Image(
+                        painter = painterResource(iconResId),
+                        contentDescription = itemLabel // Use the item label as content description
+                    )
+                },
+                label = { Text(itemLabel) },
+                selected = index == selectedIndex,
+                onClick = { onItemSelected(index) }
+            )
+            if (index < items.size - 1) {
+                Spacer(modifier = Modifier.width(8.dp))
+            }
+        }
+    }
+}
+
+@Composable
+fun AppHomepage(navController: NavController) {
+    // Define navigation items and selected index
+    val items = listOf(
+        R.drawable.ic_home to "Home",
+        R.drawable.ic_workout to "Workouts",
+        R.drawable.ic_setting to "Settings"
+    )
+    var selectedItem by remember { mutableStateOf(0) }
+
+    // Function to handle item selection
+    fun onItemSelected(index: Int) {
+        selectedItem = index
+        // Handle navigation based on selected item
+        when (index) {
+            0 -> navController.navigate("Home") // Navigate to Home destination
+            1 -> navController.navigate("Workouts") // Navigate to Workouts destination
+            2 -> navController.navigate("Settings") // Navigate to Settings destination
+        }
+    }
+
+    // Content of your AppHomepage
+    NavigationBar(
+        items = items,
+        selectedIndex = selectedItem,
+        onItemSelected = ::onItemSelected
+    )
+}
+
+
+
+
+
 
 @Preview // test comment
 @Composable
