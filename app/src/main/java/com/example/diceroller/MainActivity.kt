@@ -10,22 +10,16 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-
-
+import androidx.compose.foundation.background
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.TextButton
-
-
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
-
-
-
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.res.painterResource
@@ -39,6 +33,21 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Card
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.material3.Icon
+
+
+
+
 
 
 
@@ -65,6 +74,11 @@ fun FitnessAppNavigation() {
         composable("AppHomepage") {
             AppHomepage(navController)
         }
+
+        composable("WorkoutsPage") {
+            WorkoutsPage(navController)
+        }
+
 
     }
 }
@@ -203,29 +217,137 @@ fun AppHomepage(navController: NavController) {
         // Handle navigation based on selected item
         when (index) {
             0 -> navController.navigate("Home") // Navigate to Home destination
-            1 -> navController.navigate("Workouts") // Navigate to Workouts destination
+            1 -> navController.navigate("WorkoutsPage") // Navigate to Workouts destination
             2 -> navController.navigate("Settings") // Navigate to Settings destination
         }
     }
 
     // Content of your AppHomepage
-    NavigationBar(
-        items = items,
-        selectedIndex = selectedItem,
-        onItemSelected = ::onItemSelected
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(text = "Welcome to Fitness App", fontSize = 24.sp)
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // You can add more content for each section here
+        Text(text = "Content for ${items[selectedItem].second} section")
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // NavigationBar
+        NavigationBar(
+            items = items,
+            selectedIndex = selectedItem,
+            onItemSelected = ::onItemSelected
+        )
+    }
+}
+
+
+@Composable
+fun WorkoutsPage(navController: NavController) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Start
+        ) {
+            BackButton(navController = navController)
+        }
+
+        Text(
+            text = "Workouts For You",
+            fontSize = 32.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(bottom = 16.dp)
+        )
+
+        Text(
+            text = "Pre-designed Workout Plans",
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+        PreDesignedWorkoutPlans(navController)
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Text(
+            text = "Create Your Own Custom Plan",
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+        CreateCustomPlan(navController)
+    }
+}
+
+
+@Composable
+fun PreDesignedWorkoutPlans(navController: NavController) {
+    // Mock data for pre-designed workout plans
+    val preDesignedWorkouts = listOf(
+        "Beginner Push Pull Program",
+        "Intermediate 5x5 Plan",
+        "Advanced Workout Plan",
+        "Jamal Browner Powerlifting Program",
+        "Calisthenics Program"
+    )
+
+    LazyColumn {
+        items(preDesignedWorkouts) { workout ->
+            PreDesignedWorkoutCard(workout = workout, navController = navController)
+        }
+    }
+}
+
+@Composable
+fun PreDesignedWorkoutCard(workout: String, navController: NavController) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp)
+            .clickable { /* Navigate to workout details */ },
+        shape = MaterialTheme.shapes.medium
+    ) {
+        Text(
+            text = workout,
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Normal,
+            modifier = Modifier.padding(16.dp)
+        )
+    }
+}
+
+@Composable
+fun CreateCustomPlan(navController: NavController) {
+    // Display UI elements to create a custom workout plan
+    Text(
+        text = "Create your custom workout plan here",
+        fontSize = 18.sp,
+        fontWeight = FontWeight.Normal
+    )
+    // Add UI elements for creating custom workout plan (e.g., input fields, buttons, etc.)
+}
+
+@Composable
+fun BackButton(navController: NavController) {
+    Text(
+        text = "Back",
+        modifier = Modifier
+            .clickable { navController.popBackStack() }
+            .padding(8.dp) // Add padding for better touch target
     )
 }
 
 
 
-
-
-
-@Preview // test comment
-@Composable
-fun PreviewFitnessTrackerApp() {
-    FitnessTrackerApp(rememberNavController())
-}
 
 
 
